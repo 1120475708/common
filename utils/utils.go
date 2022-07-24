@@ -3,10 +3,14 @@ package utils
 import (
 	"crypto/sha256"
 	"encoding/base64"
+	"github.com/1120475708/common/constant"
 	"io"
+	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 func GetOffsetFromHeader(h http.Header) int64 {
@@ -42,4 +46,40 @@ func CalculateHash(r io.Reader) string {
 	h := sha256.New()
 	io.Copy(h, r)
 	return base64.StdEncoding.EncodeToString(h.Sum(nil))
+}
+
+var once sync.Once
+
+func HasDir(path string) (bool, error) {
+	_, _err := os.Stat(path)
+	if _err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(_err) {
+		return false, nil
+	}
+	return false, _err
+}
+
+func mkDir() {
+	_exist, _err := HasDir(constant.StoragePath)
+	if _err != nil {
+		log.Printf("获取文件夹异常 -> %v\n", _err)
+		return
+	}
+	if _exist {
+		log.Println("文件夹已存在！")
+	} else {
+		err := os.Mkdir(constant.StoragePath, os.ModePerm)
+		if err != nil {
+			log.Printf("创建目录异常 -> %v\n", err)
+		} else {
+			log.Println("创建成功!")
+		}
+	}
+}
+
+func GetPrefixPath() string {
+	once.Do(mkDir)
+	return constant.StoragePath
 }

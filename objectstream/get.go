@@ -25,7 +25,6 @@ func NewGetStream(server, object string) (*GetStream, error) {
 	if server == "" || object == "" {
 		return nil, fmt.Errorf("invalid server %s object %s", server, object)
 	}
-	}
 	return newGetStream("http://" + server + "/objects/" + object)
 }
 
