@@ -5,4 +5,4 @@ const ListenAddress = "LISTEN_ADDRESS"
 const DataServer = "dataServers"
 const ApiServer = "apiServers"
 
-const StoragePath = "./tmp/objects"
+const StoragePath = "./tmp/objects/"
