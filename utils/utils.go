@@ -70,7 +70,7 @@ func mkDir(path string) {
 	if _exist {
 		log.Println("文件夹已存在！")
 	} else {
-		err := os.Mkdir(path, os.ModePerm)
+		err := os.MkdirAll(path, os.ModePerm)
 		if err != nil {
 			log.Printf("创建目录异常 -> %v\n", err)
 		} else {
@@ -80,13 +80,9 @@ func mkDir(path string) {
 }
 
 func GetPrefixPath() string {
-	pwd, err := os.Getwd()
-	if err != nil {
-		log.Println("Getwd err", err)
-	}
-	path := pwd + constant.StoragePath
+	path := constant.StoragePath
 	f := func() { mkDir(path) }
-
 	once.Do(f)
-	return constant.StoragePath
+
+	return path
 }
