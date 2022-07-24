@@ -61,7 +61,7 @@ func HasDir(path string) (bool, error) {
 	return false, _err
 }
 
-func mkDir() {
+func mkDir(path string) {
 	_exist, _err := HasDir(constant.StoragePath)
 	if _err != nil {
 		log.Printf("获取文件夹异常 -> %v\n", _err)
@@ -80,6 +80,13 @@ func mkDir() {
 }
 
 func GetPrefixPath() string {
-	once.Do(mkDir)
+	pwd, err := os.Getwd()
+	if err != nil {
+		log.Println("Getwd err", err)
+	}
+	path := pwd + constant.StoragePath
+	f := func() { mkDir(path) }
+
+	once.Do(f)
 	return constant.StoragePath
 }
