@@ -62,7 +62,7 @@ func HasDir(path string) (bool, error) {
 }
 
 func mkDir(path string) {
-	_exist, _err := HasDir(constant.StoragePath)
+	_exist, _err := HasDir(path)
 	if _err != nil {
 		log.Printf("获取文件夹异常 -> %v\n", _err)
 		return
@@ -70,7 +70,7 @@ func mkDir(path string) {
 	if _exist {
 		log.Println("文件夹已存在！")
 	} else {
-		err := os.Mkdir(constant.StoragePath, os.ModePerm)
+		err := os.Mkdir(path, os.ModePerm)
 		if err != nil {
 			log.Printf("创建目录异常 -> %v\n", err)
 		} else {
